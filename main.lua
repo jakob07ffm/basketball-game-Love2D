@@ -15,12 +15,12 @@ function love.load()
         dy = 0,
         speed = 300,
         gravity = 800,
-        jumpStrength = -400
+        jumpStrength = -800
     }
     
     hoop = {
         x = 700,
-        y = 100,
+        y = 400,
         width = 100,
         height = 10
     }
@@ -34,11 +34,6 @@ function love.load()
     
     score = 0
     isJumping = false
-
-    sounds = {
-        score = love.audio.newSource("score.wav", "static"),
-        hit = love.audio.newSource("hit.wav", "static")
-    }
 end
 
 function love.update(dt)
@@ -56,6 +51,7 @@ function love.update(dt)
     end
     
     ball.dy = ball.dy + ball.gravity * dt
+    
     ball.x = ball.x + ball.dx * dt
     ball.y = ball.y + ball.dy * dt
     
@@ -67,18 +63,18 @@ function love.update(dt)
 
     if ball.x + ball.radius > hoop.x and ball.x - ball.radius < hoop.x + hoop.width and
        ball.y + ball.radius > hoop.y and ball.y - ball.radius < hoop.y + hoop.height then
-        score = score + 1
-        sounds.score:play()
-        ball.x = 400
-        ball.y = 300
-        ball.dy = 0
-        isJumping = false
+        if ball.dy > 0 then
+            score = score + 1
+            ball.x = 400
+            ball.y = 300
+            ball.dy = 0
+            isJumping = false
+        end
     end
     
     if ball.x + ball.radius > backboard.x and ball.x - ball.radius < backboard.x + backboard.width and
        ball.y + ball.radius > backboard.y and ball.y - ball.radius < backboard.y + backboard.height then
         ball.dx = -ball.dx
-        sounds.hit:play()
     end
 end
 
